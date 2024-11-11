@@ -12,13 +12,33 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MainController mainController = Get.find();
+    final MainController controller = Get.find();
     final listPage = [
       const TextScreen(),
       const FileScreen(),
       const SteganoScreen(),
     ];
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Yusuf Arrafi',
+          style: TextStyle(
+            fontSize: 12,
+            color: Constants.colorBlack,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: (){
+              controller.logOut();
+            },
+            icon: const Icon(
+              Icons.logout,
+              size: 24,
+            ),
+          ),
+        ],
+      ),
       body: Obx(() =>
           SafeArea(
             child: Padding(
@@ -28,14 +48,14 @@ class MainPage extends StatelessWidget {
                 20,
                 0,
               ),
-              child: listPage[mainController.currentIndex.value],
+              child: listPage[controller.currentIndex.value],
             ),
           ),
       ),
       bottomNavigationBar: Obx(() =>
           BottomNavigationBar(
-            currentIndex: mainController.currentIndex.value,
-            onTap: mainController.changePage,
+            currentIndex: controller.currentIndex.value,
+            onTap: controller.changePage,
             selectedItemColor: Constants.colorGreen,
             showUnselectedLabels: false,
             items: const [

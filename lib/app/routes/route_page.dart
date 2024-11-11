@@ -1,5 +1,7 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:tugas_akhir_kripto/app/modules/bindings/login_binding.dart';
+import 'package:tugas_akhir_kripto/app/modules/views/page/login_page.dart';
 import 'package:tugas_akhir_kripto/app/routes/route_name.dart';
 
 import '../modules/bindings/main_binding.dart';
@@ -15,6 +17,13 @@ class RoutePage{
       binding: SplashBinding(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
+      name: RouteName.login,
+      page: () => const LoginPage(),
+      binding: LoginBinding(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 1000),
     ),
     GetPage(
       name: RouteName.main,

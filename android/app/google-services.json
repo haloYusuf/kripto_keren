@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "576132899763",
+    "project_id": "kripto-keren",
+    "storage_bucket": "kripto-keren.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576132899763:android:a6272154a77b8a7051a1c6",
+        "android_client_info": {
+          "package_name": "com.tugas.akhir.kripto.tugas_akhir_kripto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJUdeQSGpH4Jp3AmafHiwZ4X-gpWOFt4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

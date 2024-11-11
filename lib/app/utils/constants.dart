@@ -9,4 +9,6 @@ class Constants{
   static Color colorGrey = const Color(0xFF8D8B99);
   static Color colorRed = const Color(0xFFEB4C4C);
   static Color colorDarkGreen = const Color(0xFF136932);
+
+  static String dataIsLogin = 'isLogin';
 }
