@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tugas_akhir_kripto/app/modules/controllers/login_controller.dart';
-import 'package:tugas_akhir_kripto/app/utils/constants.dart';
+import 'package:tugas_akhir_kripto/app/modules/controllers/register_controller.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+import '../../../utils/constants.dart';
+
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({super.key});
 
   Widget _gapVertical({required double gap}){
     return SizedBox(height: gap,);
@@ -16,7 +17,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController controller = Get.find();
+    final RegisterController controller = Get.find();
     return Scaffold(
       body: Center(
         child: Padding(
@@ -48,7 +49,7 @@ class LoginPage extends StatelessWidget {
               ),
               _gapVertical(gap: 50),
               const Text(
-                'Masuk',
+                'Buat Akun',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
@@ -96,11 +97,39 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
               ),
+              _gapVertical(gap: 20),
+              Obx(() =>
+                  TextField(
+                    controller: controller.confirmPasswordController,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                    obscureText: controller.visibilityConfirmPassword.value,
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Password',
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 15,
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: (){
+                          controller.visibilityConfirmPassword.value = !controller.visibilityConfirmPassword.value;
+                        },
+                        icon: Icon(
+                          controller.visibilityConfirmPassword.value ? Icons.visibility : Icons.visibility_off,
+                        ),
+                      ),
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+              ),
               _gapVertical(gap: 5),
               Row(
                 children: [
                   Text(
-                    'Tidak punya akun?',
+                    'Sudah punya akun?',
                     style: TextStyle(
                       fontSize: 14,
                       color: Constants.colorBlack,
@@ -109,13 +138,13 @@ class LoginPage extends StatelessWidget {
                   _gapHorizontal(gap: 5),
                   TextButton(
                     onPressed: (){
-                      controller.toRegister();
+                      controller.back();
                     },
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.all(3),
                     ),
                     child: Text(
-                      'Daftar',
+                      'Login',
                       style: TextStyle(
                         fontSize: 14,
                         color: Constants.colorGreen,
@@ -127,13 +156,13 @@ class LoginPage extends StatelessWidget {
               _gapVertical(gap: 20),
               ElevatedButton(
                 onPressed: (){
-                  controller.logIn();
+                  controller.register();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Constants.colorGreen,
                 ),
                 child: Text(
-                  'Login',
+                  'Register',
                   style: TextStyle(
                     fontSize: 16,
                     color: Constants.colorWhite,

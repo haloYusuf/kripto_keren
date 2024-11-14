@@ -1,7 +1,11 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:tugas_akhir_kripto/app/modules/bindings/login_binding.dart';
+import 'package:tugas_akhir_kripto/app/modules/bindings/new_chat_binding.dart';
+import 'package:tugas_akhir_kripto/app/modules/bindings/register_binding.dart';
 import 'package:tugas_akhir_kripto/app/modules/views/page/login_page.dart';
+import 'package:tugas_akhir_kripto/app/modules/views/page/new_chat_page.dart';
+import 'package:tugas_akhir_kripto/app/modules/views/page/register_page.dart';
 import 'package:tugas_akhir_kripto/app/routes/route_name.dart';
 
 import '../modules/bindings/main_binding.dart';
@@ -26,9 +30,23 @@ class RoutePage{
       transitionDuration: const Duration(milliseconds: 1000),
     ),
     GetPage(
+      name: RouteName.register,
+      page: () => const RegisterPage(),
+      binding: RegisterBinding(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 1000),
+    ),
+    GetPage(
       name: RouteName.main,
       page: () => const MainPage(),
       binding: MainBinding(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 1000),
+    ),
+    GetPage(
+      name: RouteName.newChat,
+      page: () => const NewChatPage(),
+      binding: NewChatBinding(),
       transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 1000),
     ),

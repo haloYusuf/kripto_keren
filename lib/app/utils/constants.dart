@@ -11,4 +11,6 @@ class Constants{
   static Color colorDarkGreen = const Color(0xFF136932);
 
   static String dataIsLogin = 'isLogin';
+  static String dataUserToken = 'userToken';
+  static String dataUser = 'dataUser';
 }
