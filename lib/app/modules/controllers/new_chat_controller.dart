@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../utils/aes_helper.dart';
@@ -5,34 +6,73 @@ import '../../utils/vigenere_cipher.dart';
 
 class NewChatController extends GetxController{
 
-  void porsesEncryptDecrypt(){
-    const aesKey = 'my16charsecret!!'; // Kunci harus 16 karakter untuk AES-128
-    const aesIV = 'my16byteivvector'; // IV harus 16 karakter
-    final aesHelper = AESHelper(keyString: aesKey, ivString: aesIV);
+  late TextEditingController usernameController;
+  late TextEditingController aesKeyController;
+  late TextEditingController aesIVController;
+  late TextEditingController vigenereKeyController;
 
-    // Inisialisasi kunci untuk Vigenere
-    const vigenereKey = 'test123solo?!';
-    final vigenere = VigenereCipher();
+  NewChatController(){
+    usernameController = TextEditingController();
+    aesKeyController = TextEditingController();
+    aesIVController = TextEditingController();
+    vigenereKeyController = TextEditingController();
+  }
 
-    const plainText = 'halo semua, perkenalkan namaku salma hanifa, saya umur 20 tahun lho!!! Senang berkenalan dengan anda, nama anda siapa?';
+  void sendProcess(){
+    if(aesKeyController.text.length != 16){
+      _showDialog(
+        title: 'Error',
+        message: 'Panjang karakter Aes Key harus 16 Karakter.',
+      );
+    }else if(aesIVController.text.length != 16){
+      _showDialog(
+        title: 'Error',
+        message: 'Panjang karakter Aes IV harus 16 Karakter.',
+      );
+    }else if(vigenereKeyController.text.isEmpty){
+      _showDialog(
+        title: 'Error',
+        message: 'Vigenere Key tidak boleh kosong.',
+      );
+    }else{
+      final aesKey = aesKeyController.text;
+      final aesIV = aesIVController.text;
+      final aesHelper = AESHelper(keyString: aesKey, ivString: aesIV);
 
-    print('Teks Asli: $plainText');
+      final vigenereKey = vigenereKeyController.text;
+      final vigenere = VigenereCipher();
 
-    // Enkripsi Vigenere
-    final vigenereEncrypted = vigenere.encrypt(plainText, vigenereKey);
-    print('Hasil Enkripsi Vigenere: $vigenereEncrypted');
+      const plainText = 'halo semua, perkenalkan namaku salma hanifa, saya umur 20 tahun lho!!! Senang berkenalan dengan anda, nama anda siapa?';
 
-    // Enkripsi AES-128
-    final aesEncrypted = aesHelper.encrypt(vigenereEncrypted);
-    print('Hasil Enkripsi AES: $aesEncrypted');
+      print('Teks Asli: $plainText');
 
-    // Dekripsi AES-128
-    final aesDecrypted = aesHelper.decrypt(aesEncrypted);
-    print('Hasil Dekripsi AES: $aesDecrypted');
+      // Enkripsi Vigenere
+      final vigenereEncrypted = vigenere.encrypt(plainText, vigenereKey);
+      print('Hasil Enkripsi Vigenere: $vigenereEncrypted');
 
-    // Dekripsi Vigenere
-    final vigenereDecrypted = vigenere.decrypt(aesDecrypted, vigenereKey);
-    print('Teks yang di-dekripsi: $vigenereDecrypted');
+      // Enkripsi AES-128
+      final aesEncrypted = aesHelper.encrypt(vigenereEncrypted);
+      print('Hasil Enkripsi AES: $aesEncrypted');
+
+      // Dekripsi AES-128
+      final aesDecrypted = aesHelper.decrypt(aesEncrypted);
+      print('Hasil Dekripsi AES: $aesDecrypted');
+
+      // Dekripsi Vigenere
+      final vigenereDecrypted = vigenere.decrypt(aesDecrypted, vigenereKey);
+      print('Teks yang di-dekripsi: $vigenereDecrypted');
+    }
+  }
+
+  SnackbarController _showDialog({
+    required String title,
+    required String message,
+  }){
+    return Get.snackbar(
+      title,
+      message,
+      duration: const Duration(seconds: 1),
+    );
   }
 
 }
