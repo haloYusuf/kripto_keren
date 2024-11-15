@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tugas_akhir_kripto/app/data/services/auth_service.dart';
+import 'package:tugas_akhir_kripto/app/data/services/user_service.dart';
 
 import '../../routes/route_name.dart';
 
 class LoginController extends GetxController{
-  late AuthService service;
+  late UserService service;
 
   var visibilityPassword = true.obs;
 
@@ -16,7 +16,7 @@ class LoginController extends GetxController{
   late TextEditingController passwordController;
 
   LoginController(){
-    service = AuthService();
+    service = UserService();
 
     usernameController = TextEditingController();
     passwordController = TextEditingController();

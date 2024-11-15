@@ -3,11 +3,11 @@ import 'package:get_storage/get_storage.dart';
 
 import '../../utils/constants.dart';
 
-class AuthService{
+class UserService{
   late FirebaseFirestore _fireStore;
   late GetStorage _box;
 
-  AuthService(){
+  UserService(){
     _fireStore = FirebaseFirestore.instance;
     _box = GetStorage();
   }
@@ -69,13 +69,29 @@ class AuthService{
           .where('username', isEqualTo: uName)
           .get()
           .then((value){
-        val = value.size < 1;
-      }
-      );
+            val = value.size < 1;
+          });
     }catch (e){
       val = false;
     }
     return val;
   }
+
+  Future<String> getUserToken({
+    required String uName,
+  }) async{
+    var val = '';
+    try{
+      await _fireStore.collection('users')
+          .where('username', isEqualTo: uName)
+          .get()
+          .then((value){
+            val = value.docs.first.data()['token'] ?? '';
+          });
+    }catch (e){
+      val = '';
+    }
+    return val;
+}
 
 }

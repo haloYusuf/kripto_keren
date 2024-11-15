@@ -6,11 +6,11 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:tugas_akhir_kripto/app/routes/route_name.dart';
 
-import '../../data/services/auth_service.dart';
+import '../../data/services/user_service.dart';
 
 class RegisterController extends GetxController{
 
-  late AuthService service;
+  late UserService service;
 
   var visibilityPassword = true.obs;
   var visibilityConfirmPassword = true.obs;
@@ -20,7 +20,7 @@ class RegisterController extends GetxController{
   late TextEditingController confirmPasswordController;
 
   RegisterController(){
-    service = AuthService();
+    service = UserService();
 
     usernameController = TextEditingController();
     passwordController = TextEditingController();

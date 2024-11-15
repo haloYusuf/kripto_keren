@@ -10,11 +10,11 @@ class NewChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     NewChatController controller = Get.find();
 
-    Widget _gapVertical({required double gap}){
+    Widget gapVertical({required double gap}){
       return SizedBox(height: gap,);
     }
 
-    Widget _gapHorizontal({required double gap}){
+    Widget gapHorizontal({required double gap}){
       return SizedBox(width: gap,);
     }
 
@@ -54,11 +54,16 @@ class NewChatPage extends StatelessWidget {
                         contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15,),
                         border: OutlineInputBorder(),
                       ),
+                      onSubmitted: (value){
+                        controller.searchUser();
+                      },
                     ),
                   ),
-                  _gapHorizontal(gap: 10),
+                  gapHorizontal(gap: 10),
                   IconButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      controller.searchUser();
+                    },
                     style: IconButton.styleFrom(
                       backgroundColor: Constants.colorGreen,
                     ),
@@ -70,100 +75,129 @@ class NewChatPage extends StatelessWidget {
                   ),
                 ],
               ),
-              _gapVertical(gap: 20),
+              gapVertical(gap: 20),
               Container(
                 height: 0.5,
                 color: Constants.colorBlack,
               ),
-              _gapVertical(gap: 20),
-              Text(
-                'AES Encryption Set-up : ',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Constants.colorBlack,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              _gapVertical(gap: 5),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: controller.aesKeyController,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      maxLength: 16,
-                      style: const TextStyle(
-                        fontSize: 14,
+              gapVertical(gap: 5),
+              Obx((){
+                if(controller.statusSearch.value == 5){
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      gapVertical(gap: 15),
+                      Text(
+                        'Buat chat baru dengan: ${controller.usernameController.text}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Constants.colorBlack,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                      decoration: const InputDecoration(
-                        labelText: 'Aes Key',
-                        hintText: 'Masukkan Aes Key',
-                        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15,),
-                        border: OutlineInputBorder(),
+                      gapVertical(gap: 10),
+                      Text(
+                        'AES Encryption Set-up : ',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Constants.colorBlack,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
+                      gapVertical(gap: 5),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: controller.aesKeyController,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              maxLength: 16,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                              decoration: const InputDecoration(
+                                labelText: 'Aes Key',
+                                hintText: 'Masukkan Aes Key',
+                                contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15,),
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          gapHorizontal(gap: 10),
+                          Expanded(
+                            child: TextField(
+                              controller: controller.aesIVController,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              maxLength: 16,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                              decoration: const InputDecoration(
+                                labelText: 'Aes IV',
+                                hintText: 'Masukkan Aes IV',
+                                contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15,),
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      gapVertical(gap: 10),
+                      Text(
+                        'Vigenere Encryption Set-up : ',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Constants.colorBlack,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      gapVertical(gap: 5),
+                      TextField(
+                        controller: controller.vigenereKeyController,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
+                        decoration: const InputDecoration(
+                          labelText: 'Vigenere Key',
+                          hintText: 'Masukkan Vigenere Key',
+                          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15,),
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      gapVertical(gap: 20),
+                      ElevatedButton(
+                        onPressed: (){
+                          controller.sendProcess();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Constants.colorGreen,
+                        ),
+                        child: Text(
+                          'Proses',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Constants.colorWhite,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }else{
+                  return Text(
+                    controller.errorMessage.value,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.red,
                     ),
-                  ),
-                  _gapHorizontal(gap: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: controller.aesIVController,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      maxLength: 16,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                      decoration: const InputDecoration(
-                        labelText: 'Aes IV',
-                        hintText: 'Masukkan Aes IV',
-                        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15,),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              _gapVertical(gap: 10),
-              Text(
-                'Vigenere Encryption Set-up : ',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Constants.colorBlack,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              _gapVertical(gap: 5),
-              TextField(
-                controller: controller.vigenereKeyController,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.done,
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
-                decoration: const InputDecoration(
-                  labelText: 'Vigenere Key',
-                  hintText: 'Masukkan Vigenere Key',
-                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15,),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              _gapVertical(gap: 20),
-              ElevatedButton(
-                onPressed: (){
-                  controller.sendProcess();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.colorGreen,
-                ),
-                child: Text(
-                  'Proses',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Constants.colorWhite,
-                  ),
-                ),
-              ),
+                  );
+                }
+              }),
             ],
           ),
         ),
