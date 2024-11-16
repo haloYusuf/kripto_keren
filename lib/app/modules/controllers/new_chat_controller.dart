@@ -1,16 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:tugas_akhir_kripto/app/data/services/chat_service.dart';
+import 'package:tugas_akhir_kripto/app/data/services/conversation_service.dart';
 import 'package:tugas_akhir_kripto/app/data/services/user_service.dart';
 import 'package:tugas_akhir_kripto/app/utils/constants.dart';
 
 class NewChatController extends GetxController{
 
   late UserService userService;
-  late ChatService chatService;
+  late ConversationService conversationService;
 
   late TextEditingController usernameController;
   late TextEditingController aesKeyController;
@@ -19,7 +17,8 @@ class NewChatController extends GetxController{
 
   late GetStorage _box;
   var statusSearch = (-1).obs;
-  var userToken = ''.obs;
+  var targetToken = ''.obs;
+  var targetName = ''.obs;
   var errorMessage = ''.obs;
 
 
@@ -30,7 +29,7 @@ class NewChatController extends GetxController{
     vigenereKeyController = TextEditingController();
 
     userService = UserService();
-    chatService = ChatService();
+    conversationService = ConversationService();
     _box = GetStorage();
   }
 
@@ -53,22 +52,20 @@ class NewChatController extends GetxController{
         if(value.isEmpty){
           statusSearch.value = 0;
           errorMessage.value = 'Username tidak ditemukan!';
+        }else if(value == _box.read(Constants.dataUserToken)){
+          statusSearch.value = 1;
+          errorMessage.value = 'Tidak boleh memasukkan username anda sendiri!';
         }else{
-          if(value == _box.read(Constants.dataUserToken)){
-            statusSearch.value = 1;
-            errorMessage.value = 'Tidak boleh memasukkan username anda sendiri!';
-          }else{
-            await chatService.isAnyUserInChat(targetToken: value).then((v){
-              print(v);
-              if(v){
-                statusSearch.value = 2;
-                errorMessage.value = 'Anda sudah membuat Chat dengan ${usernameController.text}!';
-              }else{
-                userToken.value = value;
-                statusSearch.value = 5;
-              }
-            });
-          }
+          await conversationService.isAnyUserInChat(targetToken: value).then((v){
+            if(v){
+              statusSearch.value = 2;
+              errorMessage.value = 'Anda sudah membuat Chat dengan ${usernameController.text}!';
+            }else{
+              targetToken.value = value;
+              targetName.value = usernameController.text;
+              statusSearch.value = 5;
+            }
+          });
         }
       });
     }
@@ -101,8 +98,9 @@ class NewChatController extends GetxController{
         title: 'Loading',
         content: const CircularProgressIndicator(),
       );
-      await chatService.createNewChat(
-        targetToken: userToken.value,
+      await conversationService.createNewChat(
+        targetToken: targetToken.value,
+        targerName: targetName.value,
         aesKey: aesKey,
         aesIV: aesIV,
         vigenereKey: vigenereKey,

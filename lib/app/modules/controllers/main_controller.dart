@@ -29,4 +29,8 @@ class MainController extends GetxController{
   void toNewChat(){
     Get.toNamed(RouteName.newChat);
   }
+
+  void toNotification(){
+    Get.toNamed(RouteName.notification);
+  }
 }

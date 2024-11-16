@@ -1,15 +1,19 @@
-class ChatModel{
+class ConversationModel{
   final String id;
-  final List<String> persons;
+  final List<String> personToken;
+  final List<String> personName;
+  final String userRequest;
   final String aesKey;
   final String aesIV;
   final String vigenereKey;
   final DateTime createdDate;
   final DateTime updatedDate;
 
-  ChatModel({
+  ConversationModel({
     required this.id,
-    required this.persons,
+    required this.personToken,
+    required this.personName,
+    required this.userRequest,
     required this.aesKey,
     required this.aesIV,
     required this.vigenereKey,
@@ -17,10 +21,12 @@ class ChatModel{
     required this.updatedDate,
   });
 
-  factory ChatModel.fromMap(Map<String, dynamic> map) {
-    return ChatModel(
+  factory ConversationModel.fromMap(Map<String, dynamic> map) {
+    return ConversationModel(
       id: map['id'],
-      persons: map['persons'],
+      personToken: map['persons_token'],
+      personName: map['persons_name'],
+      userRequest: map['user_request'],
       aesKey: map['aesKey'],
       aesIV: map['aesIV'],
       vigenereKey: map['vigenereKey'],
@@ -32,7 +38,9 @@ class ChatModel{
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'persons': persons,
+      'persons_token': personToken,
+      'persons_name': personName,
+      'user_request': userRequest,
       'aesKey': aesKey,
       'aesIV': aesIV,
       'vigenereKey': vigenereKey,

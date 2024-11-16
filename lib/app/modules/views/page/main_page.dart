@@ -29,7 +29,9 @@ class MainPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: (){},
+            onPressed: (){
+              controller.toNotification();
+            },
             icon: const Icon(
               Icons.notifications_none,
               size: 24,
