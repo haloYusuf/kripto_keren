@@ -52,9 +52,9 @@ class MainPage extends StatelessWidget {
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(
-                20,
-                30,
-                20,
+                10,
+                5,
+                10,
                 0,
               ),
               child: listPage[controller.currentIndex.value],

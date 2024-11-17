@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,7 +14,8 @@ class DetailChatController extends GetxController{
   late MessageService messageService;
   late GetStorage _box;
   late TextEditingController contentController;
-  late ScrollController scrollController;
+
+  final ScrollController scrollController = ScrollController();
 
   late ConversationModel convData;
   late List<MessageModel> chatData;
@@ -36,11 +36,19 @@ class DetailChatController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    scrollController = ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if(scrollController.hasClients){
-        scrollController.jumpTo(scrollController.position.maxScrollExtent);
-      }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    scrollController.dispose();
+    contentController.dispose();
+    super.dispose();
+  }
+
+  void scrollToBottom() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
     });
   }
 
@@ -102,9 +110,15 @@ class DetailChatController extends GetxController{
             title: 'Error',
             message: 'Gagal mengirim pesan.',
           );
+        }else{
+          scrollToBottom();
         }
       });
     }
+  }
+
+  void dismissKeyboard() {
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   SnackbarController _showDialog({

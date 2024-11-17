@@ -65,6 +65,7 @@ class DetailChatPage extends StatelessWidget {
                       ),
                     );
                   }else{
+                    controller.scrollToBottom();
                     return ListView.builder(
                       controller: controller.scrollController,
                       itemCount: controller.chatData.length,
@@ -148,6 +149,7 @@ class DetailChatPage extends StatelessWidget {
                 gapHorizontal(gap: 10),
                 IconButton(
                   onPressed: (){
+                    controller.dismissKeyboard();
                     controller.sendMessage();
                   },
                   icon: Icon(

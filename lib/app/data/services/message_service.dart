@@ -38,6 +38,7 @@ class MessageService{
     required String message,
   })async{
     var val = false;
+    var waktu = Timestamp.now();
     try{
       await _fireStore.collection('conversations')
           .doc(id)
@@ -46,9 +47,13 @@ class MessageService{
           .set({
         'content': message,
         'sender_token': _box.read(Constants.dataUserToken),
-        'sending_date': Timestamp.now(),
-      }).then((value){
-        val = true;
+        'sending_date': waktu,
+      }).then((value)async{
+        await _fireStore.collection('conversations').doc(id).update({
+          'updated_date': waktu,
+        }).then((value){
+          val = true;
+        });
       });
     }catch (e){
       val = false;
