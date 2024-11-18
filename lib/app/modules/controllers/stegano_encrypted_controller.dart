@@ -43,7 +43,7 @@ class SteganoEncryptedController extends GetxController{
 
   Future<void> pickHiddenImage()async{
     try{
-      var status = await Permission.storage.request();
+      var status = await Permission.manageExternalStorage.request();
       if (status.isGranted) {
         resultSecret = await FilePicker.platform.pickFiles(
           type: FileType.image,

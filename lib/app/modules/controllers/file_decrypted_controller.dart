@@ -21,7 +21,7 @@ class FileDecryptedController extends GetxController{
 
   Future<void> pickFile()async{
     try{
-      var status = await Permission.storage.request();
+      var status = await Permission.manageExternalStorage.request();
       if (status.isGranted) {
         result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
