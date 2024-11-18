@@ -89,12 +89,17 @@ class DetailChatPage extends StatelessWidget {
                                 constraints: BoxConstraints(
                                   maxWidth: MediaQuery.of(context).size.width * 3 / 4,
                                 ),
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.only(
+                                decoration: BoxDecoration(
+                                  borderRadius: controller.isSender(index: index) ?
+                                  const BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10),
+                                  ) :
+                                  const BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
                                   ),
-                                  color: Color(0xFFA6FFD7),
+                                  color: const Color(0xFFA6FFD7),
                                 ),
                                 padding: const EdgeInsets.all(16),
                                 child: Text(

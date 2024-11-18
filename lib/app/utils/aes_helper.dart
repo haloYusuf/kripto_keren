@@ -16,24 +16,20 @@ class AESHelper{
     encrypter = Encrypter(AES(key, mode: AESMode.cbc));
   }
 
-  // Enkripsi dengan AES
   String encrypt(String plainText) {
     final encrypted = encrypter.encrypt(plainText, iv: iv);
     return encrypted.base64;
   }
 
-  // Dekripsi dengan AES
   String decrypt(String encryptedText) {
     final decrypted = encrypter.decrypt64(encryptedText, iv: iv);
     return decrypted;
   }
 
-  // Enkripsi dengan AES
   Uint8List encryptFile(Uint8List plainBytes) {
     return encrypter.encryptBytes(plainBytes, iv: iv).bytes;
   }
 
-  // Dekripsi dengan AES
   List<int> decryptFile(Uint8List encryptedBytes) {
     return encrypter.decryptBytes(Encrypted(encryptedBytes), iv: iv);
   }

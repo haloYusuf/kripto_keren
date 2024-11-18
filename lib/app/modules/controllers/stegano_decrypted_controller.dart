@@ -69,9 +69,9 @@ class SteganoDecryptedController extends GetxController{
     ).then((value){
       Get.back();
       if(value){
-        _showDialog(title: 'Sukses', message: 'Pesan berhasil didapatkan.');
+        _showDialog(title: 'Sukses', message: 'Gambar berhasil didapatkan. Lihat pada folder /CryptChat/stegano/dekripsi/.');
       }else{
-        _showDialog(title: 'Gagal', message: 'Pesan gagal didapatkan.');
+        _showDialog(title: 'Gagal', message: 'Gambar gagal didapatkan.');
       }
       result = null;
       isAnyResult.value = false;
@@ -86,7 +86,7 @@ class SteganoDecryptedController extends GetxController{
     return Get.snackbar(
       title,
       message,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2),
     );
   }
 }

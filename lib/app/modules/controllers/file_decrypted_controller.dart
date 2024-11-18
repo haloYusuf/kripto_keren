@@ -68,7 +68,7 @@ class FileDecryptedController extends GetxController{
       await fileHelper.decryptFile(result!.files.single.path!, fileName).then((value){
         Get.back();
         if(value){
-          _showDialog(title: 'Sukses', message: 'File berhasil di dekripsi.');
+          _showDialog(title: 'Sukses', message: 'File berhasil di dekripsi. Lihat pada folder /CryptChat/file/dekripsi/.');
           isAnyResult.value = false;
           result = null;
           aesKeyController.clear();
@@ -89,7 +89,7 @@ class FileDecryptedController extends GetxController{
     return Get.snackbar(
       title,
       message,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2),
     );
   }
 

@@ -38,7 +38,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   _gapHorizontal(gap: 10),
                   const Text(
-                    'KriptoKeren',
+                    Constants.appName,
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w600,

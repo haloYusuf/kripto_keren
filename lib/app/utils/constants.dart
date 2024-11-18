@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Constants{
+  static const String appName = 'CryptChat';
+
   static String fontNamePoppins = 'Poppins';
 
   static Color colorGreen = const Color(0xFF22C45D);

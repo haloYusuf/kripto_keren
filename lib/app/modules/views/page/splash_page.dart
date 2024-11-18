@@ -30,7 +30,7 @@ class SplashPage extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    'KriptoKeren',
+                    Constants.appName,
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w500,

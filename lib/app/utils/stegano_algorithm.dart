@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:image/image.dart';
 
 class SteganoAlgorithm{
-  Future<String> _getCustomDirectoryPath() async {
-    final customDir = Directory('/storage/emulated/0/CryptChat/stegano');
+  Future<String> _getCustomDirectoryPath(String status) async {
+    final customDir = Directory('/storage/emulated/0/CryptChat/stegano/$status');
 
     if (!await customDir.exists()) {
       await customDir.create(recursive: true);
@@ -29,26 +29,21 @@ class SteganoAlgorithm{
         return false;
       }
 
-      // Ubah pesan menjadi biner
-      String binaryMessage = '${_textToBinary(message)}00000000'; // Tambah terminator (null byte)
+      String binaryMessage = '${_textToBinary(message)}00000000';
 
       int messageIndex = 0;
-      // Sisipkan bit pesan ke dalam LSB dari channel merah
       for (int y = 0; y < image.height; y++) {
         for (int x = 0; x < image.width; x++) {
           if (messageIndex < binaryMessage.length) {
             Pixel pixel = image.getPixel(x, y);
 
-            // Dapatkan channel warna
             int red = pixel.getChannel(Channel.red).toInt();
             int green = pixel.getChannel(Channel.green).toInt();
             int blue = pixel.getChannel(Channel.blue).toInt();
             int alpha = pixel.getChannel(Channel.alpha).toInt();
 
-            // Modifikasi channel merah untuk menyembunyikan pesan
             int newRed = (red & 0xFE) | int.parse(binaryMessage[messageIndex]);
 
-            // Buat warna baru dengan `ColorRgba8`
             Color newColor = ColorRgba8(newRed, green, blue, alpha);
             image.setPixel(x, y, newColor);
 
@@ -59,10 +54,9 @@ class SteganoAlgorithm{
         }
       }
 
-      String outputPath = await _getCustomDirectoryPath();
+      String outputPath = await _getCustomDirectoryPath('enkripsi');
       final outputFile = File('$outputPath/$name');
       await outputFile.writeAsBytes(encodePng(image));
-      print('Pesan berhasil disembunyikan dan disimpan di: $outputPath');
       return true;
     }catch (e){
       e.printInfo();
@@ -70,7 +64,6 @@ class SteganoAlgorithm{
     }
   }
 
-  // Fungsi untuk membaca pesan yang disembunyikan dari gambar
   Future<String> extractMessage(String inputPath) async {
     try{
       final inputFile = File(inputPath);
@@ -84,17 +77,14 @@ class SteganoAlgorithm{
       String binaryMessage = '';
       bool terminatorFound = false;
 
-      // Loop melalui piksel dan ekstrak LSB
       outerLoop:
       for (int y = 0; y < image.height; y++) {
         for (int x = 0; x < image.width; x++) {
           Pixel pixel = image.getPixel(x, y);
           int red = pixel.getChannel(Channel.red).toInt();
 
-          // Ekstrak LSB dari channel merah
           binaryMessage += (red & 1).toString();
 
-          // Periksa apakah kita menemukan terminator
           if (binaryMessage.endsWith('00000000')) {
             terminatorFound = true;
             break outerLoop;
@@ -115,20 +105,28 @@ class SteganoAlgorithm{
 
   Future<bool> hideImage(String hostImagePath, String secretImagePath, String name) async {
     try{
-      // Baca gambar host dan secret image
       final hostFile = File(hostImagePath);
       final secretFile = File(secretImagePath);
 
       final hostImage = decodeImage(await hostFile.readAsBytes());
       final secretImage = await secretFile.readAsBytes();
 
-      if (hostImage == null) {
-        print('Gagal memuat host image.');
+      if (hostImage == null || secretImage.isEmpty) {
         return false;
       }
 
-      // Konversi secret image menjadi biner
+      int hostCapacity = hostImage.width * hostImage.height;
+
       String binaryData = _bytesToBinary(secretImage);
+
+      int dataLengthBits = 32 + (binaryData.length);
+
+      if (dataLengthBits > hostCapacity) {
+        return false;
+      }
+
+      String lengthBinary = (secretImage.length).toRadixString(2).padLeft(32, '0');
+      binaryData = lengthBinary + binaryData;
 
       int dataIndex = 0;
       for (int y = 0; y < hostImage.height; y++) {
@@ -141,7 +139,6 @@ class SteganoAlgorithm{
             int blue = pixel.getChannel(Channel.blue).toInt();
             int alpha = pixel.getChannel(Channel.alpha).toInt();
 
-            // Sisipkan bit dari secret image ke LSB dari channel merah
             int newRed = (red & 0xFE) | int.parse(binaryData[dataIndex]);
             dataIndex++;
 
@@ -150,11 +147,9 @@ class SteganoAlgorithm{
         }
       }
 
-      // Simpan gambar yang telah disisipi
-      String outputPath = await _getCustomDirectoryPath();
+      String outputPath = await _getCustomDirectoryPath('enkripsi');
       final outputFile = File('$outputPath/$name');
       await outputFile.writeAsBytes(encodePng(hostImage));
-      print('Pesan berhasil disembunyikan dan disimpan di: $outputPath/$name');
       return true;
     }catch(e){
       return false;
@@ -167,7 +162,6 @@ class SteganoAlgorithm{
       final hostImage = decodeImage(await hostFile.readAsBytes());
 
       if (hostImage == null) {
-        print('Gagal memuat host image.');
         return false;
       }
 
@@ -180,14 +174,27 @@ class SteganoAlgorithm{
         }
       }
 
-      // Konversi biner ke byte array
-      List<int> secretBytes = _binaryToBytes(binaryData.toString());
+      String binaryString = binaryData.toString();
 
-      // Simpan secret image yang diekstrak
-      String outputPath = await _getCustomDirectoryPath();
+      if (binaryString.length < 32) {
+        return false;
+      }
+
+      String lengthBinary = binaryString.substring(0, 32);
+      int dataLength = int.parse(lengthBinary, radix: 2);
+
+      int totalDataBits = 32 + (dataLength * 8);
+      if (binaryString.length < totalDataBits) {
+        return false;
+      }
+
+      String binarySecret = binaryString.substring(32, totalDataBits);
+
+      List<int> secretBytes = _binaryToBytes(binarySecret);
+
+      String outputPath = await _getCustomDirectoryPath('dekripsi');
       final outputFile = File('$outputPath/$name');
       await outputFile.writeAsBytes(secretBytes);
-      print('Gambar berhasil disimpan di: $outputPath/$name');
       return true;
     }catch (e){
       e.printInfo();
@@ -195,12 +202,10 @@ class SteganoAlgorithm{
     }
   }
 
-  // Konversi byte array menjadi biner
   String _bytesToBinary(Uint8List bytes) {
     return bytes.map((byte) => byte.toRadixString(2).padLeft(8, '0')).join();
   }
 
-  // Konversi biner menjadi byte array
   List<int> _binaryToBytes(String binary) {
     List<int> bytes = [];
     for (int i = 0; i < binary.length; i += 8) {

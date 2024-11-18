@@ -109,7 +109,7 @@ class FileDecryptedSubScreen extends StatelessWidget {
                         backgroundColor: Constants.colorGreen,
                       ),
                       child: Text(
-                        'Enkripsi',
+                        'Dekripsi',
                         style: TextStyle(
                           fontSize: 16,
                           color: Constants.colorWhite,

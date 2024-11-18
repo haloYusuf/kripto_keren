@@ -70,7 +70,7 @@ class SteganoEncryptedController extends GetxController{
         content: const CircularProgressIndicator(),
       );
       var data = resultHost!.files.single.name.split('.');
-      data[0] = '${data[0]}.encrypted';
+      data[0] = '${data[0]}.encryptedtext';
       await steganoAlgorithm.hideMessageText(
         message: messageController.text,
         inputPath: resultHost!.files.single.path!,
@@ -78,7 +78,7 @@ class SteganoEncryptedController extends GetxController{
       ).then((value) {
         Get.back();
         if(value){
-          _showDialog(title: 'Sukses', message: 'Pesan berhasil disisipkan.');
+          _showDialog(title: 'Sukses', message: 'Pesan berhasil disisipkan. Lihat pada folder /CryptChat/stegano/enkripsi/.');
           resultHost = null;
           resultSecret = null;
           isAnyResultHost.value = false;
@@ -102,7 +102,7 @@ class SteganoEncryptedController extends GetxController{
         content: const CircularProgressIndicator(),
       );
       var data = resultHost!.files.single.name.split('.');
-      data[0] = '${data[0]}.encrypted';
+      data[0] = '${data[0]}.encryptedimage';
       await steganoAlgorithm.hideImage(
         resultHost!.files.single.path!,
         resultSecret!.files.single.path!,
@@ -110,7 +110,7 @@ class SteganoEncryptedController extends GetxController{
       ).then((value){
         Get.back();
         if(value){
-          _showDialog(title: 'Sukses', message: 'Gambar berhasil disisipkan.');
+          _showDialog(title: 'Sukses', message: 'Gambar berhasil disisipkan. Lihat pada folder /CryptChat/stegano/enkripsi/.');
           resultHost = null;
           resultSecret = null;
           isAnyResultHost.value = false;
@@ -118,7 +118,7 @@ class SteganoEncryptedController extends GetxController{
           selectedItem.value = '';
           messageController.clear();
         }else{
-          _showDialog(title: 'Gagal', message: 'Gambar gagal disisipkan.');
+          _showDialog(title: 'Gagal', message: 'Gambar gagal disisipkan. Gambar host tidak cukup besar untuk menyimpan data atau gambar tidak berhasil di baca.');
         }
       });
     }
@@ -131,7 +131,7 @@ class SteganoEncryptedController extends GetxController{
     return Get.snackbar(
       title,
       message,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2),
     );
   }
 }

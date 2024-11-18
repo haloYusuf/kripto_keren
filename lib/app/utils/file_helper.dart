@@ -15,8 +15,8 @@ class FileHelper{
     aesHelper = AESHelper(keyString: key, ivString: iv);
   }
 
-  Future<String> _getCustomDirectoryPath() async {
-    final customDir = Directory('/storage/emulated/0/CryptChat/file');
+  Future<String> _getCustomDirectoryPath(String status) async {
+    final customDir = Directory('/storage/emulated/0/CryptChat/file/$status');
 
     if (!await customDir.exists()) {
       await customDir.create(recursive: true);
@@ -29,7 +29,7 @@ class FileHelper{
       final bytes = await inputFile.readAsBytes();
       final encryptedBytes = aesHelper.encryptFile(bytes);
 
-      final directoryPath = await _getCustomDirectoryPath();
+      final directoryPath = await _getCustomDirectoryPath('enkripsi');
       final outputPath = '$directoryPath/$fileName.enc';
 
       final encryptedFile = File(outputPath);
@@ -46,7 +46,7 @@ class FileHelper{
       final encryptedBytes = await encryptedFile.readAsBytes();
       final decryptedBytes = aesHelper.decryptFile(encryptedBytes);
 
-      final directoryPath = await _getCustomDirectoryPath();
+      final directoryPath = await _getCustomDirectoryPath('dekripsi');
       final outputPath = '$directoryPath/$outputFileName';
 
       final decryptedFile = File(outputPath);
